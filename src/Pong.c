@@ -11,6 +11,16 @@
 #define PADDLE_WIDTH 10
 #define PADDLE_HEIGHT 80
 
+#define PADDLE_MIN_Y 0
+#define PADDLE_MAX_Y (SCREEN_HEIGHT - PADDLE_HEIGHT)
+
+#define PADDLE_1_X 0
+#define PADDLE_2_X (SCREEN_WIDTH - PADDLE_WIDTH)
+
+#define PADDLE_SPEED 5
+
+#define UPDATE_TICKS 10
+
 int main(void) {
     // SDL_Init must be called before most other SDL functions
     // Event Handling, File I/O, and Threading are initialized by default.
@@ -35,11 +45,12 @@ int main(void) {
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // create the game objects
-    GameObject paddle1 = Paddle_Create(renderer, 0, 20, PADDLE_WIDTH, PADDLE_HEIGHT);
-    GameObject paddle2 = Paddle_Create(renderer, SCREEN_WIDTH-PADDLE_WIDTH, 200, PADDLE_WIDTH, PADDLE_HEIGHT);
+    GameObject paddle1 = Paddle_Create(renderer, PADDLE_1_X, 20, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, PADDLE_MIN_Y, PADDLE_MAX_Y);
+    GameObject paddle2 = Paddle_Create(renderer, PADDLE_2_X, 200, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_SPEED, PADDLE_MIN_Y, PADDLE_MAX_Y);
     
     // Enter game loop
     bool done = false;
+    uint32_t last = 0;
     while (!done) {
         // message processing loop
         SDL_Event event;
@@ -58,6 +69,13 @@ int main(void) {
         }
 
         // Do game update
+        uint32_t now = SDL_GetTicks();
+        // check if overflow occured on the time
+        if (now > last + UPDATE_TICKS || now < last && (now + UINT32_MAX - last > UPDATE_TICKS)) {
+            GameObject_Update(paddle1);
+            GameObject_Update(paddle2);
+            last = now;
+        }
         
         // Update graphics
         // clear screen to black

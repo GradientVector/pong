@@ -3,7 +3,7 @@
 
 typedef struct _GameObjectInterface_s {
     void (*Destroy)(GameObject self);
-    void (*Update)(GameObject self, int x, int y);
+    void (*Update)(GameObject self);
     void (*Draw)(GameObject self);
 } GameObjectInterface_s;
 
