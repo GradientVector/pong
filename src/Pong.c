@@ -71,7 +71,7 @@ int main(void) {
         // Do game update
         uint32_t now = SDL_GetTicks();
         // check if overflow occured on the time
-        if (now > last + UPDATE_TICKS || now < last && (now + UINT32_MAX - last > UPDATE_TICKS)) {
+        if (now > last + UPDATE_TICKS || (now < last && (now + UINT32_MAX - last > UPDATE_TICKS))) {
             GameObject_Update(paddle1);
             GameObject_Update(paddle2);
             last = now;
