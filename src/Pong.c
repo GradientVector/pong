@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <SDL.h>
+#include "Paddle.h"
 
 #define TITLE "pong"
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
+
+#define PADDLE_WIDTH 10
+#define PADDLE_HEIGHT 80
 
 int main(void) {
     // SDL_Init must be called before most other SDL functions
@@ -14,6 +18,8 @@ int main(void) {
         printf("Unable to init SDL: %s\n", SDL_GetError());
         return 1; // Exit early with error
     }
+    // Must be called before an SDL application exits to safely shut down all subsystems.
+    atexit(SDL_Quit);
 
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -24,14 +30,13 @@ int main(void) {
                                 &renderer);
     SDL_SetWindowTitle(window, TITLE);
 
-    // clear screen to black
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
-
     // make the scaled rendering look smoother
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // create the game objects
+    GameObject paddle1 = Paddle_Create(renderer, 0, 20, PADDLE_WIDTH, PADDLE_HEIGHT);
+    GameObject paddle2 = Paddle_Create(renderer, SCREEN_WIDTH-PADDLE_WIDTH, 200, PADDLE_WIDTH, PADDLE_HEIGHT);
     
     // Enter game loop
     bool done = false;
@@ -51,15 +56,23 @@ int main(void) {
                     break;
             }
         }
+
         // Do game update
+        
         // Update graphics
+        // clear screen to black
+	    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	    SDL_RenderClear(renderer);
+        // draw paddles
+        GameObject_Draw(paddle1);
+        GameObject_Draw(paddle2);
+
+	    SDL_RenderPresent(renderer); // update the window
+
         // Update input
     }
 
     // Do exit cleanup
-
-    // Must be called before an SDL application exits to safely shut down all subsystems.
-    SDL_Quit();
 
 	return EXIT_SUCCESS;
 }

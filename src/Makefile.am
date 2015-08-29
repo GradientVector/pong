@@ -1,3 +1,3 @@
-bin_PROGRAMS=a.out
-a_out_SOURCES=pong.c
+bin_PROGRAMS=pong
+pong_SOURCES=Pong.c GameObject.c Paddle.c
 
