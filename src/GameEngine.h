@@ -1,8 +1,9 @@
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
-void GameEngine_Quit(void) {
-    printf("%s\n", SDL_GetError());
-    exit(1);
-}
+void GameEngine_Quit(void);
 
+#endif // GAMEENGINE_H

@@ -1,3 +1,6 @@
+#ifndef GAMEOBJECTPRIVATE_H
+#define GAMEOBJECTPRIVATE_H
+
 #include <SDL.h>
 #include "GameObject.h"
 
@@ -14,3 +17,4 @@ typedef struct _GameObject_s {
     int w, h; // width, height
 } GameObject_s;
 
+#endif // GAMEOBJECTPRIVATE_H
